@@ -1,25 +1,31 @@
 import React, { useEffect, useState } from "react";
 import firebase, { User } from "firebase/app";
 import "firebase/auth";
-import { Option, fromNullable, none } from "fp-ts/lib/Option";
+import * as O from "fp-ts/lib/Option";
 
 import firebaseApp from "./firebaseApp";
-const googleProvider = new firebase.auth.GoogleAuthProvider();
 
-export const signIn = () => firebaseApp.auth().signInWithPopup(googleProvider);
+// --------- authentication actions ---------
+export const signIn = () =>
+  firebaseApp.auth().signInWithPopup(new firebase.auth.GoogleAuthProvider());
+
 export const signOut = () => firebaseApp.auth().signOut();
 
-type CurrentUser = Option<User>;
+// --------- React authentication functionality ---------
+export type CurrentUser = O.Option<User>;
 
-export const AuthContext = React.createContext<CurrentUser>(none);
+export const AuthContext = React.createContext<CurrentUser>(O.none);
 
-type AuthComponent = React.FC<{ children: React.ReactElement }>;
-export const AuthProvider: AuthComponent = ({ children }) => {
-  const [user, setUser] = useState<CurrentUser>(none);
+interface AuthProviderProps {
+  children: React.ReactElement;
+}
+
+export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
+  const [user, setUser] = useState<CurrentUser>(O.none);
 
   useEffect(() => {
     firebaseApp.auth().onAuthStateChanged(user => {
-      setUser(fromNullable(user));
+      setUser(O.fromNullable(user));
     });
   }, []);
 
