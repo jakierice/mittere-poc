@@ -21,7 +21,7 @@ function PublicPage() {
 function ProtectedPage() {
   return (
     <div>
-      <h3>Protected</h3>
+      <h1>Protected</h1>
       <p>
         You have to be logged in to see this page! This is where all of the good
         stuff happens. Rock your world and raise support with{" "}
