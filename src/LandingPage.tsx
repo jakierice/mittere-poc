@@ -16,34 +16,36 @@ import {
 import { AuthContext, signIn } from "./Auth";
 
 const renderLoginMessage = () => (
-  <Paper elevation={4}>
-    <Box
-      padding={8}
-      display="flex"
-      flexDirection="column"
-      alignItems="center"
-      justifyContent="center"
-    >
-      <Typography variant="h1" align="center">
-        Mittere
-      </Typography>
-      <Typography variant="subtitle1" align="center">
-        Take control of your support pipeline so you can support the world.
-      </Typography>
-      <Box m={2}>
-        <Button variant="contained" color="primary" onClick={signIn}>
-          Login
-        </Button>
+  <Box maxWidth="600px">
+    <Paper elevation={4}>
+      <Box
+        padding={8}
+        display="flex"
+        flexDirection="column"
+        alignItems="center"
+        justifyContent="center"
+      >
+        <Typography variant="h1" align="center">
+          Mittere
+        </Typography>
+        <Typography variant="subtitle1" align="center">
+          Take control of your support pipeline so you can support the world.
+        </Typography>
+        <Box m={2}>
+          <Button variant="contained" color="primary" onClick={signIn}>
+            Login
+          </Button>
+        </Box>
       </Box>
-    </Box>
-  </Paper>
+    </Paper>
+  </Box>
 );
 
 function LandingPage() {
   const currentUser = useContext(AuthContext);
 
   return (
-    <Box p={16}>
+    <Box p={16} display="flex" justifyContent="center" alignItems="center">
       {pipe(
         currentUser,
         RemoteData.fold(
