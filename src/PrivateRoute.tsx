@@ -60,7 +60,7 @@ function PrivateRoute(props: any) {
                 O.fold(
                   () => (
                     <Redirect
-                      to={{ pathname: "/login", state: { from: location } }}
+                      to={{ pathname: "/", state: { from: location } }}
                     />
                   ),
                   () => <AppLayout>{children}</AppLayout>
