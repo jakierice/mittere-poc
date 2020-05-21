@@ -1,22 +1,9 @@
 import React, { useContext } from "react";
+import { Redirect } from 'react-router-dom';
 import * as O from "fp-ts/lib/Option";
 import { pipe } from "fp-ts/lib/pipeable";
-import { User } from "firebase";
 
 import { AuthContext, signIn } from "./Auth";
-
-const renderUserMessage = (user: User) =>
-  pipe(
-    O.fromNullable(user.displayName),
-    O.fold(
-      () => <p>You are already logged in!</p>,
-      displayName => (
-        <span>
-          Currently logged in as <em>{displayName}</em>
-        </span>
-      )
-    )
-  );
 
 const renderLoginMessage = () => (
   <>
@@ -32,7 +19,7 @@ function LoginPage() {
     <>
       <h1>Login Page</h1>
       <div>
-        {pipe(currentUser, O.fold(renderLoginMessage, renderUserMessage))}
+        {pipe(currentUser, O.fold(renderLoginMessage, () => <Redirect to="/home" />))}
       </div>
     </>
   );
