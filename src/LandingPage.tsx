@@ -51,9 +51,7 @@ function LandingPage() {
         RemoteData.fold(
           () => null,
           () => <CircularProgress />,
-          () => (
-            <Typography>'There is an error with authentication.'</Typography>
-          ),
+          () => <Typography>There is an error with authentication.</Typography>,
           user =>
             pipe(
               user,
