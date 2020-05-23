@@ -1,11 +1,17 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
+import * as O from "fp-ts/lib/Option";
+import { pipe } from "fp-ts/lib/pipeable";
+import * as RemoteData from "@devexperts/remote-data-ts";
 
 import clsx from "clsx";
 import {
   AppBar,
+  Avatar,
+  Box,
   Divider,
   Drawer,
+  Grid,
   IconButton,
   List,
   ListItem,
@@ -25,8 +31,8 @@ import {
   Menu as MenuIcon
 } from "@material-ui/icons";
 
-import { signOut } from './Auth';
-import { ToggleThemeButton } from './Theme';
+import { signOut, AuthContext, CurrentUser } from "./Auth";
+import { ToggleThemeButton } from "./Theme";
 
 const NavListItem: React.FC<{
   to: string;
@@ -61,9 +67,6 @@ const useStyles = makeStyles(theme => ({
       easing: theme.transitions.easing.easeOut,
       duration: theme.transitions.duration.enteringScreen
     })
-  },
-  menuButton: {
-    marginRight: theme.spacing(2)
   },
   hide: {
     display: "none"
@@ -101,10 +104,26 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
+const getUserPhotoURL = (currentUser: CurrentUser) =>
+  pipe(
+    RemoteData.toOption(currentUser),
+    O.chain(
+      O.fold(
+        () => O.some(""),
+        user => O.fromNullable(user.photoURL)
+      )
+    ),
+    O.fold(
+      () => "",
+      URL => URL
+    )
+  );
+
 function AppLayout(props: { children: React.ReactNode }) {
   const classes = useStyles();
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
+  const currentUser = React.useContext(AuthContext);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -123,19 +142,40 @@ function AppLayout(props: { children: React.ReactNode }) {
         })}
       >
         <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            onClick={handleDrawerOpen}
-            edge="start"
-            className={clsx(classes.menuButton, open && classes.hide)}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" noWrap>
-            Mittere
-          </Typography>
-          <ToggleThemeButton />
+          <Grid container justify="space-between">
+            <Grid item>
+              <Box
+                display="flex"
+                flexDirection="row"
+                justifyContent="flex-start"
+                alignItems="center"
+              >
+                <IconButton
+                  color="inherit"
+                  aria-label="open drawer"
+                  onClick={handleDrawerOpen}
+                  edge="start"
+                  className={clsx(open && classes.hide)}
+                >
+                  <MenuIcon />
+                </IconButton>
+                <Typography variant="h6" noWrap>
+                  Mittere
+                </Typography>
+              </Box>
+            </Grid>
+            <Grid item>
+              <Box
+                display="flex"
+                flexDirection="row"
+                justifyContent="flex-start"
+                alignItems="center"
+              >
+                <ToggleThemeButton />
+                <Avatar src={getUserPhotoURL(currentUser)} />
+              </Box>
+            </Grid>
+          </Grid>
         </Toolbar>
       </AppBar>
       <Drawer
