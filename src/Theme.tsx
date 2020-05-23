@@ -9,7 +9,6 @@ import {
 import {
   createMuiTheme,
   ThemeProvider as MuiThemeProvider,
-  useTheme,
   IconButton
 } from "@material-ui/core";
 
@@ -63,6 +62,12 @@ const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const theme = createMuiTheme({
     palette: {
+      primary: {
+        main: '#1565c0',
+      },
+      secondary: {
+        main: '#ffca28'
+      },
       type: pipe(
         themeType,
         E.fold(
@@ -70,6 +75,9 @@ const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
           () => "light"
         )
       )
+    },
+    shape: {
+      borderRadius: 0
     }
   });
 
