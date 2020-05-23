@@ -42,39 +42,35 @@ const ToggleThemeButton = () => {
   );
 };
 
+const getThemeTypeValue: (T: ThemeType) => "dark" | "light" = themeState =>
+  pipe(
+    themeState,
+    E.fold(
+      () => "dark",
+      () => "light"
+    )
+  );
+
 const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
   children
 }) => {
-  const [themeType, setThemeType] = React.useState<ThemeType>(E.left("dark"));
+  const [themeState, setThemeState] = React.useState<ThemeType>(E.left("dark"));
 
-  const toggleThemeType = () =>
-    pipe(
-      themeType,
-      E.fold(
-        () => {
-          setThemeType(E.right("light"));
-        },
-        () => {
-          setThemeType(E.left("dark"));
-        }
-      )
+  const toggleThemeType = () => {
+    setThemeState(prevState =>
+      pipe(prevState, E.fold(() => E.right('light'), () => E.left('dark')))
     );
+  };
 
   const theme = createMuiTheme({
     palette: {
       primary: {
-        main: '#1565c0',
+        main: "#1565c0"
       },
       secondary: {
-        main: '#ffca28'
+        main: "#ffca28"
       },
-      type: pipe(
-        themeType,
-        E.fold(
-          () => "dark",
-          () => "light"
-        )
-      )
+      type: getThemeTypeValue(themeState)
     },
     shape: {
       borderRadius: 0
@@ -82,7 +78,7 @@ const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
   });
 
   const contextBag = {
-    themeType,
+    themeType: themeState,
     toggleThemeType
   };
 
