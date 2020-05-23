@@ -9,7 +9,6 @@ import {
 import {
   createMuiTheme,
   ThemeProvider as MuiThemeProvider,
-  useTheme,
   IconButton
 } from "@material-ui/core";
 
