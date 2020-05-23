@@ -4,7 +4,6 @@ import { NavLink } from "react-router-dom";
 import clsx from "clsx";
 import {
   AppBar,
-  CssBaseline,
   Divider,
   Drawer,
   IconButton,
@@ -27,6 +26,7 @@ import {
 } from "@material-ui/icons";
 
 import { signOut } from './Auth';
+import { ToggleThemeButton } from './Theme';
 
 const NavListItem: React.FC<{
   to: string;
@@ -116,7 +116,6 @@ function AppLayout(props: { children: React.ReactNode }) {
 
   return (
     <div className={classes.root}>
-      <CssBaseline />
       <AppBar
         position="fixed"
         className={clsx(classes.appBar, {
@@ -136,6 +135,7 @@ function AppLayout(props: { children: React.ReactNode }) {
           <Typography variant="h6" noWrap>
             Mittere
           </Typography>
+          <ToggleThemeButton />
         </Toolbar>
       </AppBar>
       <Drawer
