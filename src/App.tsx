@@ -8,6 +8,7 @@ import PrivateRoute from "./PrivateRoute";
 import LandingPage from "./LandingPage";
 import HomePage from "./HomePage";
 import ContactsPage from "./ContactsPage";
+import UserProfilePage from './UserProfilePage';
 
 import ThemeProvider from "./Theme";
 
@@ -26,6 +27,9 @@ export default function App() {
             </PrivateRoute>
             <PrivateRoute path="/contacts">
               <ContactsPage />
+            </PrivateRoute>
+            <PrivateRoute path="/profile">
+              <UserProfilePage />
             </PrivateRoute>
           </Switch>
         </Router>

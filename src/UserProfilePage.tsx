@@ -4,10 +4,10 @@ import { Container, Typography } from "@material-ui/core";
 
 import PageHeader from "./PageHeader";
 
-function ContactsPage() {
+function UserProfilePage() {
   return (
     <>
-      <PageHeader>Contacts</PageHeader>
+      <PageHeader>Profile</PageHeader>
       <Container>
         <Typography variant="subtitle1">Coming soon!</Typography>
       </Container>
@@ -15,4 +15,4 @@ function ContactsPage() {
   );
 }
 
-export default ContactsPage;
+export default UserProfilePage;
