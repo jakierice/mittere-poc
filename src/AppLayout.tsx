@@ -104,7 +104,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const getUserPhotoURL = (currentUser: CurrentUser) =>
+const getUserPhotoURL = (currentUser: CurrentUser): string =>
   pipe(
     RemoteData.toOption(currentUser),
     O.chain(
@@ -122,7 +122,7 @@ const getUserPhotoURL = (currentUser: CurrentUser) =>
 function AppLayout(props: { children: React.ReactNode }) {
   const classes = useStyles();
   const theme = useTheme();
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = React.useState(true);
   const currentUser = React.useContext(AuthContext);
 
   const handleDrawerOpen = () => {
@@ -142,7 +142,7 @@ function AppLayout(props: { children: React.ReactNode }) {
         })}
       >
         <Toolbar>
-          <Grid container justify="space-between">
+          <Grid container justify="space-between" alignItems="center">
             <Grid item>
               <Box
                 display="flex"
