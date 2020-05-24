@@ -1,4 +1,5 @@
 import React from "react";
+import useDarkMode from "use-dark-mode";
 import * as E from "fp-ts/lib/Either";
 import { pipe } from "fp-ts/lib/pipeable";
 
@@ -54,12 +55,18 @@ const getThemeTypeValue: (T: ThemeType) => "dark" | "light" = themeState =>
 const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
   children
 }) => {
-  const [themeState, setThemeState] = React.useState<ThemeType>(E.left("dark"));
+  const {
+    value: isDarkModeEnabled,
+    enable: enableDarkMode,
+    disable: disableDarkMode
+  } = useDarkMode(false);
+
+  const themeState: ThemeType = isDarkModeEnabled
+    ? E.left("dark")
+    : E.right("light");
 
   const toggleThemeType = () => {
-    setThemeState(prevState =>
-      pipe(prevState, E.fold(() => E.right('light'), () => E.left('dark')))
-    );
+    pipe(themeState, E.fold(disableDarkMode, enableDarkMode));
   };
 
   const theme = createMuiTheme({
