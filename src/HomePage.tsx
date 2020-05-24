@@ -1,18 +1,40 @@
 import React from "react";
 
-import { Container, Typography } from "@material-ui/core";
+import { Box, Container, Typography, makeStyles } from "@material-ui/core";
 
 import PageHeader from "./PageHeader";
+import underConstructionImage from "./assets/under-construction.svg";
+
+const useStyles = makeStyles({
+  underConstructionImage: {
+    maxWidth: "45vw"
+  }
+});
 
 function HomePage() {
+  const classes = useStyles();
+
   return (
-    <Container>
+    <>
       <PageHeader>Mission Control</PageHeader>
-      <Typography variant="subtitle1">
-        Soon this page will have all kinds of wizz-bang tools to help you build
-        a network or supporters and raise money foryour missions!
-      </Typography>
-    </Container>
+      <Container maxWidth="sm">
+        <Box
+          display="flex"
+          alignItems="center"
+          flexDirection="column"
+          py={4}
+        >
+          <img
+            src={underConstructionImage}
+            alt="building under construction."
+            className={classes.underConstructionImage}
+          />
+          <Typography align="center" variant="h2">
+            Coming soon!
+          </Typography>
+        </Box>
+      </Container>
+    </>
   );
 }
 
