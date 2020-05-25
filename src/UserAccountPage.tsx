@@ -3,13 +3,13 @@ import React from "react";
 import PageHeader from "./PageHeader";
 import UnderConstructionBanner from './UnderConstructionBanner';
 
-function UserProfilePage() {
+function UserAccountPage() {
   return (
     <>
-      <PageHeader>Profile</PageHeader>
+      <PageHeader>Account</PageHeader>
       <UnderConstructionBanner />
     </>
   );
 }
 
-export default UserProfilePage;
+export default UserAccountPage;

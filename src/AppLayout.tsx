@@ -203,6 +203,7 @@ function AppLayout(props: { children: React.ReactNode }) {
                 </IconButton>
                 <Popover
                   open={userMenuState === OPEN}
+                  onClose={handleCloseUserMenu}
                   anchorEl={userAvatarRef.current}
                   anchorOrigin={{
                     vertical: "bottom",
@@ -215,13 +216,13 @@ function AppLayout(props: { children: React.ReactNode }) {
                 >
                   <MenuItem
                     component={Link}
-                    to="/profile"
+                    to="/account"
                     onClick={handleCloseUserMenu}
                   >
                     <ListItemIcon>
                       <AccountCircleIcon />
                     </ListItemIcon>
-                    <ListItemText primary="Your Profile" />
+                    <ListItemText primary="Your Account" />
                   </MenuItem>
                   <Divider />
                   <MenuItem button onClick={signOut}>
