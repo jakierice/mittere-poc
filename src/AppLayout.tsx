@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { NavLink } from "react-router-dom";
 import * as O from "fp-ts/lib/Option";
 import { pipe } from "fp-ts/lib/pipeable";
@@ -17,12 +18,15 @@ import {
   ListItem,
   ListItemIcon,
   ListItemText,
+  Popover,
+  MenuItem,
   Toolbar,
   Typography,
   makeStyles,
   useTheme
 } from "@material-ui/core";
 import {
+  AccountCircle as AccountCircleIcon,
   ChevronLeft as ChevronLeftIcon,
   ChevronRight as ChevronRightIcon,
   Contacts as ContactsIcon,
@@ -48,6 +52,8 @@ const NavListItem: React.FC<{
   </ListItem>
 );
 
+const OPEN = "open";
+const CLOSED = "closed";
 const DRAWER_WIDTH = 240;
 
 const useStyles = makeStyles(theme => ({
@@ -122,15 +128,28 @@ const getUserPhotoURL = (currentUser: CurrentUser): string =>
 function AppLayout(props: { children: React.ReactNode }) {
   const classes = useStyles();
   const theme = useTheme();
-  const [open, setOpen] = React.useState(true);
+
+  const [userMenuState, setUserMenuState] = React.useState(CLOSED);
+  const [drawerState, setDrawerState] = React.useState(CLOSED);
+
+  const userAvatarRef = React.useRef(null);
+
   const currentUser = React.useContext(AuthContext);
 
+  const handleOpenUserMenu = () => {
+    setUserMenuState(OPEN);
+  };
+
+  const handleCloseUserMenu = () => {
+    setUserMenuState(CLOSED);
+  };
+
   const handleDrawerOpen = () => {
-    setOpen(true);
+    setDrawerState(OPEN);
   };
 
   const handleDrawerClose = () => {
-    setOpen(false);
+    setDrawerState(CLOSED);
   };
 
   return (
@@ -138,7 +157,7 @@ function AppLayout(props: { children: React.ReactNode }) {
       <AppBar
         position="fixed"
         className={clsx(classes.appBar, {
-          [classes.appBarShift]: open
+          [classes.appBarShift]: drawerState === OPEN
         })}
       >
         <Toolbar>
@@ -155,7 +174,7 @@ function AppLayout(props: { children: React.ReactNode }) {
                   aria-label="open drawer"
                   onClick={handleDrawerOpen}
                   edge="start"
-                  className={clsx(open && classes.hide)}
+                  className={clsx(drawerState === OPEN && classes.hide)}
                 >
                   <MenuIcon />
                 </IconButton>
@@ -172,7 +191,46 @@ function AppLayout(props: { children: React.ReactNode }) {
                 alignItems="center"
               >
                 <ToggleThemeButton />
-                <Avatar src={getUserPhotoURL(currentUser)} />
+                <IconButton
+                  onClick={
+                    userMenuState === OPEN
+                      ? handleCloseUserMenu
+                      : handleOpenUserMenu
+                  }
+                  ref={userAvatarRef}
+                >
+                  <Avatar src={getUserPhotoURL(currentUser)} />
+                </IconButton>
+                <Popover
+                  open={userMenuState === OPEN}
+                  anchorEl={userAvatarRef.current}
+                  anchorOrigin={{
+                    vertical: "bottom",
+                    horizontal: "right"
+                  }}
+                  transformOrigin={{
+                    vertical: "top",
+                    horizontal: "right"
+                  }}
+                >
+                  <MenuItem
+                    component={Link}
+                    to="/profile"
+                    onClick={handleCloseUserMenu}
+                  >
+                    <ListItemIcon>
+                      <AccountCircleIcon />
+                    </ListItemIcon>
+                    <ListItemText primary="Your Profile" />
+                  </MenuItem>
+                  <Divider />
+                  <MenuItem button onClick={signOut}>
+                    <ListItemIcon>
+                      <LogoutIcon />
+                    </ListItemIcon>
+                    <ListItemText primary="Logout" />
+                  </MenuItem>
+                </Popover>
               </Box>
             </Grid>
           </Grid>
@@ -182,7 +240,7 @@ function AppLayout(props: { children: React.ReactNode }) {
         className={classes.drawer}
         variant="persistent"
         anchor="left"
-        open={open}
+        open={drawerState === OPEN}
         classes={{
           paper: classes.drawerPaper
         }}
@@ -202,7 +260,7 @@ function AppLayout(props: { children: React.ReactNode }) {
             <ListItemIcon>
               <HomeIcon />
             </ListItemIcon>
-            <ListItemText primary="Home" />
+            <ListItemText primary="Misson Control" />
           </NavListItem>
           <NavListItem to="/contacts">
             <ListItemIcon>
@@ -210,18 +268,11 @@ function AppLayout(props: { children: React.ReactNode }) {
             </ListItemIcon>
             <ListItemText primary="Contacts" />
           </NavListItem>
-          <Divider />
-          <ListItem button onClick={signOut}>
-            <ListItemIcon>
-              <LogoutIcon />
-            </ListItemIcon>
-            <ListItemText primary="Logout" />
-          </ListItem>
         </List>
       </Drawer>
       <main
         className={clsx(classes.content, {
-          [classes.contentShift]: open
+          [classes.contentShift]: drawerState === OPEN
         })}
       >
         <div className={classes.drawerHeader} />
