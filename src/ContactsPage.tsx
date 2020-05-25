@@ -1,16 +1,13 @@
 import React from "react";
 
-import { Container, Typography } from "@material-ui/core";
-
 import PageHeader from "./PageHeader";
+import UnderConstructionBanner from './UnderConstructionBanner';
 
 function ContactsPage() {
   return (
     <>
       <PageHeader>Contacts</PageHeader>
-      <Container>
-        <Typography variant="subtitle1">Coming soon!</Typography>
-      </Container>
+      <UnderConstructionBanner />
     </>
   );
 }
